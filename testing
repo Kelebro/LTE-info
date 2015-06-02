@@ -1,0 +1,61 @@
+package com.example.dmitry.testing;
+
+import android.content.Context;
+import android.location.Location;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.telephony.CellIdentityLte;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoLte;
+import android.telephony.CellLocation;
+import android.telephony.NeighboringCellInfo;
+import android.telephony.TelephonyManager;
+import android.telephony.cdma.CdmaCellLocation;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.List;
+
+
+public class MainActivity extends ActionBarActivity {
+    TextView PCI, locat;
+    private CellInfoLte cellInfoLte;
+    CdmaCellLocation location;
+    int cellID, lat, lon, netID, sysID;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        PCI = (TextView) findViewById(R.id.textView);
+        locat = (TextView) findViewById(R.id.textView2);
+
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        List<CellInfo> cellInfoList = tm.getAllCellInfo();
+        for (CellInfo cellInfo : cellInfoList)
+        {
+            if (cellInfo instanceof CellInfoLte)
+            {
+                cellInfoLte = (CellInfoLte) cellInfo;
+                PCI.setText(String.valueOf(cellInfoLte.getCellIdentity().getPci()));
+            }
+        }
+
+        location = (CdmaCellLocation) tm.getCellLocation();
+        cellID = location.getBaseStationId();
+        lat = location.getBaseStationLatitude();
+        lon = location.getBaseStationLongitude();
+
+        locat.setText("" + cellID +"\r \n" +lat +"\r \n" + lon);
+
+    }
+
+
+
+      //  PCI.setText(neighbours.size());
+        
+    }
